@@ -23,13 +23,13 @@
   - name: Create the code directory.
     file: group={{ project_name }} owner={{ project_name }} mode=755 state=directory path={{ project_root }}/code/
 
-  - name: Install required system packages.
-    apt: pkg={{ item }} state=installed update-cache=yes
-    with_items: '{{ system_packages }}'
+  # - name: Install required system packages.
+  #   apt: pkg={{ item }} state=installed update-cache=yes
+  #   with_items: '{{ system_packages }}'
 
-  - name: Install required Python packages.
-    easy_install: name={{ item }} executable=easy_install
-    with_items: '{{ python_packages }}'
+  # - name: Install required Python packages.
+  #   easy_install: name={{ item }} executable=easy_install
+  #   with_items: '{{ python_packages }}'
 
   - name: Change permissions.
     shell: chown -R {{ project_name }}:{{ project_name }} {{ project_root }}
@@ -46,13 +46,13 @@
     sudo_user: postgres
 
   # setup nginx
-  - name: Remove default config symlink
-    file:
-      path: /etc/nginx/sites-enabled/default
-      state: absent
+  # - name: Remove default config symlink
+  #   file:
+  #     path: /etc/nginx/sites-enabled/default
+  #     state: absent
 
-  - name: Install nginx configuration file.
-    copy: src={{ project_name }}.nginxconf dest=/etc/nginx/sites-enabled/{{ project_name }}
+  # - name: Install nginx configuration file.
+  #   copy: src={{ project_name }}.nginxconf dest=/etc/nginx/sites-enabled/{{ project_name }}
 
   # - name: Install nginx ssl files.
   #   copy:
@@ -66,25 +66,25 @@
   #     - "{{ project_name }}.key"
   #   notify: restart nginx
 
-  - name: Install gunicorn configuration file.
-    copy: src={{ item }} dest=/etc/systemd/system/{{ item }}
-    with_items:
-      - gunicorn.service
-      - gunicorn.socket
-    #notify: restart gunicorn
+  # - name: Install gunicorn configuration file.
+  #   copy: src={{ item }} dest=/etc/systemd/system/{{ item }}
+  #   with_items:
+  #     - gunicorn.service
+  #     - gunicorn.socket
+  #   #notify: restart gunicorn
 
-  - name: Enable gunicorn service
-    service: name=gunicorn enabled=yes
+  # - name: Enable gunicorn service
+  #   service: name=gunicorn enabled=yes
 
-  - name: Create /run/gunicorn
-    file: path=/run/gunicorn state=directory
+  # - name: Create /run/gunicorn
+  #   file: path=/run/gunicorn state=directory
 
-  - name: Change permissions for gunicorn.
-    shell: chown -R {{project_name }}:{{ project_name }} /run/gunicorn
+  # - name: Change permissions for gunicorn.
+  #   shell: chown -R {{project_name }}:{{ project_name }} /run/gunicorn
 
 
-  handlers:
-    - include: handlers.yml
+  # handlers:
+  #   - include: handlers.yml
 
 - include: deploy.yml
 
@@ -94,7 +94,7 @@
   gather_facts: false
   sudo: true
 
-  tasks:
-  - name: Restart services.
-    service: name={{ item }} state=restarted
-    with_items: "{{ initfiles }}"
+  # tasks:
+  # - name: Restart services.
+  #   service: name={{ item }} state=restarted
+  #   with_items: "{{ initfiles }}"

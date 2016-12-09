@@ -9,8 +9,8 @@
   tasks:
   - name: Pull sources from the repository.
     git: repo={{ project_repo }} dest={{ project_root }}/code/
-    notify:
-      - restart web frontend
+    # notify:
+    #   - restart web frontend
 
   - name: Upload configuration.
     copy: src=local_settings.py dest={{ project_root }}/code/{{ project_name }}/{{ project_name }}/local_settings.py
@@ -34,14 +34,14 @@
   - name: Manage Django static file.
     shell: "{{ project_root }}/env/bin/python3 {{ project_root }}/code/{{ project_name }}/manage.py collectstatic --noinput"
 
-  - name: Restart services.
-    service: name={{ item }} state=restarted
-    become: true
-    become_user: root
-    with_items: "{{ initfiles }}"
-    tags:
-      - restart
+  # - name: Restart services.
+  #   service: name={{ item }} state=restarted
+  #   become: true
+  #   become_user: root
+  #   with_items: "{{ initfiles }}"
+  #   tags:
+  #     - restart
 
-  handlers:
-    - include: handlers.yml
+  # handlers:
+  #   - include: handlers.yml
 
