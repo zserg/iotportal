@@ -1,0 +1,8 @@
+# Vagrant VM
+ansible-playbook --extra-vars='target=debian_vm' -u vagrant -b initialize_basic_user.yml
+ansible-playbook --extra-vars='target=debian_vm DBUSER=iot_server' -u vagrant -b provision.yml
+
+#---------------------------------------
+
+ansible-playbook -i hosts --extra-vars="target=vps3" -u root -k initialize_basic_user.yml
+ansible-playbook --extra-vars="target=vps3 DBUSER=iot_server" -K provision.yml

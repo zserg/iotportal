@@ -1,0 +1,47 @@
+---
+- hosts: '{{ target }}'
+  vars_files:
+    - vars.yml
+  gather_facts: false
+  become: yes
+  become_user: '{{ project_name }}'
+
+  tasks:
+  - name: Pull sources from the repository.
+    git: repo={{ project_repo }} dest={{ project_root }}/code/
+    notify:
+      - restart web frontend
+
+  - name: Upload configuration.
+    copy: src=local_settings.py dest={{ project_root }}/code/{{ project_name }}/{{ project_name }}/local_settings.py
+
+  - name: Upgrade the virtualenv.
+    pip: requirements={{ project_root }}/code/requirements.txt
+         virtualenv={{ project_root }}/env/
+         virtualenv_python=python3
+
+  - name: Install dev packages in virtualenv.
+    pip: name=ipython
+         virtualenv={{ project_root }}/env/
+         virtualenv_python=python3
+
+  - name: Sync Django database (make migrations).
+    shell: "{{ project_root }}/env/bin/python3 {{ project_root }}/code/{{ project_name }}/manage.py makemigrations iot_storage"
+
+  - name: Sync Django database (migrate).
+    shell: "{{ project_root }}/env/bin/python3 {{ project_root }}/code/{{ project_name }}/manage.py migrate"
+
+  - name: Manage Django static file.
+    shell: "{{ project_root }}/env/bin/python3 {{ project_root }}/code/{{ project_name }}/manage.py collectstatic --noinput"
+
+  - name: Restart services.
+    service: name={{ item }} state=restarted
+    become: true
+    become_user: root
+    with_items: "{{ initfiles }}"
+    tags:
+      - restart
+
+  handlers:
+    - include: handlers.yml
+
