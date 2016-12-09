@@ -1,0 +1,19 @@
+{% extends "iotview/base.html" %}
+
+{% block content %}
+ {% for view in views %}
+  <div class="col-md-4">
+    <h2>{{ view.description }}</h2>
+    {% for node in view.nodes %}
+      <h3>{{ node.descr }}</h3>
+      {% for d in node.data %}
+          <font size="300%" color="green">{{ d.value }}</font>
+          ({{ d.created_at }})
+      {% endfor %}
+    {% endfor %}
+  </div>
+ {% endfor %}
+{% endblock %}
+
+
+
