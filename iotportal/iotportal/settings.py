@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'iotportal.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'iot_portal',
+        'NAME': 'iotportal',
         'USER': 'iotportal',
     }
 }
