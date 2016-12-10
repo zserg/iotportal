@@ -20,7 +20,7 @@
   - name: Update the project directory.
     file: group={{ project_name }} owner={{ project_name }} mode=755 state=directory path={{ project_root }}
 
-  - name: Create the code directory.
+  - name: Create the code directory
     file: group={{ project_name }} owner={{ project_name }} mode=755 state=directory path={{ project_root }}/code/
 
   # - name: Install required system packages.
@@ -44,6 +44,14 @@
     postgresql_user: name={{ DBUSER }}  role_attr_flags=NOSUPERUSER,CREATEDB
     sudo: yes
     sudo_user: postgres
+
+  - name: Copy ca certificate
+    copy: src=ca.crt dest={{ project_root }}/code/ca.crt
+
+  - name: Add env to .profile
+    lineinfile:
+       dest={{ project_root }}/home/.profile
+       line="REQUESTS_CA_BUNDLE={{ project_root }}/code/ca.crt"
 
   # setup nginx
   # - name: Remove default config symlink

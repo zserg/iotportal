@@ -77,8 +77,8 @@ WSGI_APPLICATION = 'iotportal.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'iotportal',
-        'USER': 'iotportal',
+        'NAME': 'iot_portal',
+        'USER': 'zserg',
     }
 }
 
@@ -122,7 +122,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = '/var/projects/iotportal/static/'
 try:
-        from iot_server.local_settings import *
+        from iotportal.local_settings import *
 except ImportError:
         pass
 
